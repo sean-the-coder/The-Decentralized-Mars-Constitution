@@ -14,7 +14,7 @@ const deployMarsColonyCoin: DeployFunction = async (hre: HardhatRuntimeEnvironme
         // waitConfirmations
     })
     // verify
-    log(`Deployed Mars Colony Coin to to address: ${marsColonyCoin}`)
+    log(`🪙 Deployed Mars Colony Coin to to address: ${marsColonyCoin}`)
 
     await delegate(marsColonyCoin.address, deployer);
     log("Delegated!")
