@@ -19,13 +19,13 @@ export async function propose(args: any[], functionToCall: string, proposalDescr
         [encodedFunctionCall],
         proposalDescription,
     );
-    const proposeReceipt = proposeTx.wait(1);
+    const proposeReceipt = await proposeTx.wait(1);
 
     if (developmentChains.includes(network.name)) {
         await moveBlocks(VOTING_DELAY + 1);
     }
 
-    const proposalId = proposeReceipt.event[0];
+    const proposalId = proposeReceipt.events[0];
     let proposals = JSON.parse(fs.readFileSync(proposalsFile, "utf8")) 
     proposals[network.config.chainId!.toString()].push(proposalId.toString());
     fs.writeFileSync(proposalsFile, JSON.stringify(proposals));
