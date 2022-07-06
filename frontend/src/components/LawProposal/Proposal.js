@@ -80,7 +80,7 @@ const Proposal = () => {
         provider
       );
       try {
-        const data = await contract.getHash(1);
+        const data = await contract.getHash(4);
         setHash(data);
       } catch (err) {
         console.log("Error: ", err);
