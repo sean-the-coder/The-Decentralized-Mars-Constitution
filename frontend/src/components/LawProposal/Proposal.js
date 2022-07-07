@@ -35,7 +35,7 @@ const Proposal = () => {
     if (typeof window.ethereum !== "undefined") {
       await requestAccount();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const signer = provider.getSigner(); // a signer is needed if some type of transaction (altering the blockchain is needed)
       const contract = new ethers.Contract(
         ipfsTestAddress,
         TestingIPFS.abi,
@@ -43,7 +43,7 @@ const Proposal = () => {
       );
 
       try {
-        const transaction = await contract.storeHash(hash);
+        const transaction = await contract.storeHash(hash); //this is the function in the smart contract
         await transaction.wait();
         console.log(`${hash} was stored`);
       } catch (err) {
@@ -55,14 +55,14 @@ const Proposal = () => {
   async function getCount() {
     if (typeof window.ethereum !== "undefined") {
       await requestAccount();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum); //if the smart contract function is view, then a signer is not needed
       const contract = new ethers.Contract(
         ipfsTestAddress,
         TestingIPFS.abi,
         provider
       );
       try {
-        const data = await contract.getCount();
+        const data = await contract.getCount(); //this is the function in the smart contract
         setCount(parseInt(data._hex, 16));
       } catch (err) {
         console.log("Error: ", err);
