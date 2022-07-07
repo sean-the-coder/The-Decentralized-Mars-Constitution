@@ -11,15 +11,21 @@ contract UserRegistry {
         address citizenAddress;
     }
 
+    struct PermissionSet {
+        bool registered;
+        bool hasPermissions;
+    }
+
     constructor() {
         ownerAddress = msg.sender;
-        permissions[ownerAddress] = true;
+        permissions[ownerAddress].registered = true;
+        permissions[ownerAddress].hasPermissions = true;
     }
 
     address ownerAddress;
     uint count = 1;
 
-    mapping(address => bool) public permissions;
+    mapping(address => PermissionSet) public permissions;
     mapping(uint => Citizen) private citizens;
 
     function getUser(uint _id) public view returns(Citizen memory) {
@@ -30,17 +36,25 @@ contract UserRegistry {
         require(msg.sender == ownerAddress, "Only owner can register new users");
         Citizen memory newUser = Citizen(count, _name, _dateOfBirth, _address);
         citizens[count] = newUser;
-        permissions[_address] = true;
+        permissions[_address].registered = true;
+        permissions[_address].hasPermissions = true;
         count += 1;
     }
 
     function addressChange(uint _id, address _newAddress) public {
         Citizen memory citizen = getUser(_id);
-        require(permissions[msg.sender] == true, "You are not a permissioned user");
+        require(permissions[msg.sender].hasPermissions == true, "You are not a permissioned user");
         require(msg.sender == citizen.citizenAddress, "You can only change your own address");
-        permissions[citizen.citizenAddress] = false;
+        permissions[citizen.citizenAddress].hasPermissions = false;
+        permissions[citizen.citizenAddress].registered = false;
         citizen.citizenAddress = _newAddress;
-        permissions[_newAddress] = true;
+        permissions[_newAddress].registered = true;
+        permissions[_newAddress].hasPermissions = true;
         citizens[_id] = citizen;
+    }
+
+    function checkPermissions(address _address) public view returns(bool) {
+        require(permissions[_address].registered == true, "This address is not registered");
+        return permissions[_address].hasPermissions;
     }
 }
