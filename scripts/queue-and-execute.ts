@@ -2,6 +2,8 @@ import { ethers, network } from "hardhat"
 import {
   FUNC,
   NEW_STORE_VALUE,
+  HASH_VAL,
+  PARENTS,
   PROPOSAL_DESCRIPTION,
   MIN_DELAY,
   developmentChains,
@@ -9,11 +11,13 @@ import {
 import { moveBlocks } from "../utils/move-blocks"
 import { moveTime } from "../utils/move-time"
 
-export async function queueAndExecute() {
+export async function queueAndExecute(index : number) {
   const functionToCall = FUNC
   const dmc = await ethers.getContract("DMC")
-  const args = dmc.interface.encodeFunctionData('retrieve_func')
+  const args = [dmc.interface.encodeFunctionData('retrieve_count'), HASH_VAL, PARENTS]
   const encodedFunctionCall = dmc.interface.encodeFunctionData(functionToCall, args)
+
+  //Hash to be calculated using proposal description
   const descriptionHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(PROPOSAL_DESCRIPTION))
   // could also use ethers.utils.id(PROPOSAL_DESCRIPTION)
 
@@ -36,10 +40,10 @@ export async function queueAndExecute() {
     descriptionHash
   )
   await executeTx.wait(1)
-  console.log(`DMC value: ${await dmc.retrieve()}`)
+  console.log(`DMC value: ${await dmc.retrieve_law(index).ipfsHash}`)
 }
 
-queueAndExecute()
+queueAndExecute(1)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error)
