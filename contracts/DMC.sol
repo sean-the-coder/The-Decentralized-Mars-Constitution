@@ -28,6 +28,14 @@ contract DMC is Ownable {
   function store_law(uint256 index, string memory hash, string[] memory parents) public onlyOwner {
     hashMap[index].ipfsHash = hash;
     hashMap[index].parentHashes = parents;
+    hashCount++;
+    
+    emit DMCChanged(hashMap[index].ipfsHash);
+  }
+
+  function modify_law(uint256 index, string memory hash, string[] memory parents) public onlyOwner {
+    hashMap[index].ipfsHash = hash;
+    hashMap[index].parentHashes = parents;
     
     emit DMCChanged(hashMap[index].ipfsHash);
   }

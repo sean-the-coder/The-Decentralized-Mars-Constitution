@@ -10,9 +10,9 @@ import { moveBlocks } from "../utils/move-blocks"
 import { moveTime } from "../utils/move-time"
 
 export async function queueAndExecute() {
-  const args = [NEW_STORE_VALUE]
   const functionToCall = FUNC
   const dmc = await ethers.getContract("DMC")
+  const args = dmc.interface.encodeFunctionData('retrieve_func')
   const encodedFunctionCall = dmc.interface.encodeFunctionData(functionToCall, args)
   const descriptionHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(PROPOSAL_DESCRIPTION))
   // could also use ethers.utils.id(PROPOSAL_DESCRIPTION)
