@@ -25,16 +25,16 @@ contract DMC is Ownable {
     emit ValueChanged(newValue);
   }
 
-  function store_law(uint256 index, string memory hash, string[] memory parents) public onlyOwner {
-    hashMap[index].ipfsHash = hash;
+  function store_law(uint256 index, string memory hashVal, string[] memory parents) public onlyOwner {
+    hashMap[index].ipfsHash = hashVal;
     hashMap[index].parentHashes = parents;
     hashCount++;
     
     emit DMCChanged(hashMap[index].ipfsHash);
   }
 
-  function modify_law(uint256 index, string memory hash, string[] memory parents) public onlyOwner {
-    hashMap[index].ipfsHash = hash;
+  function modify_law(uint256 index, string memory hashVal, string[] memory parents) public onlyOwner {
+    hashMap[index].ipfsHash = hashVal;
     hashMap[index].parentHashes = parents;
     
     emit DMCChanged(hashMap[index].ipfsHash);
@@ -43,6 +43,10 @@ contract DMC is Ownable {
   // Reads the last stored value
   function retrieve() public view returns (uint256) {
     return value;
+  }
+
+  function retrieve_count() public view returns (uint256) {
+    return hashCount;
   }
 
   function retrieve_law(uint256 index) public view returns (Law memory) {
