@@ -5,7 +5,8 @@ import {
   proposalsFile,
   FUNC,
   PROPOSAL_DESCRIPTION,
-  NEW_STORE_VALUE,
+  HASH_VAL,
+  PARENTS,
 } from "../helper-hardhat-config"
 import * as fs from "fs"
 import { moveBlocks } from "../utils/move-blocks"
@@ -13,6 +14,7 @@ import { moveBlocks } from "../utils/move-blocks"
 export async function propose(args: any[], functionToCall: string, proposalDescription: string) {
   const governor = await ethers.getContract("VoterContract")
   const dmc = await ethers.getContract("DMC")
+  args = [dmc.interface.encodeFunctionData("retrieve_count"),...args]
   const encodedFunctionCall = dmc.interface.encodeFunctionData(functionToCall, args)
   console.log(`Proposing ${functionToCall} on ${dmc.address} with ${args}`)
   console.log(`Proposal Description:\n  ${proposalDescription}`)
@@ -29,6 +31,7 @@ export async function propose(args: any[], functionToCall: string, proposalDescr
   const proposeReceipt = await proposeTx.wait(1)
   const proposalId = proposeReceipt.events[0].args.proposalId
   console.log(`Proposed with proposal ID:\n  ${proposalId}`)
+  console.log(args)
 
   const proposalState = await governor.state(proposalId)
   const proposalSnapShot = await governor.proposalSnapshot(proposalId)
@@ -46,7 +49,7 @@ export async function propose(args: any[], functionToCall: string, proposalDescr
   console.log(`Current Proposal Deadline: ${proposalDeadline}`)
 }
 
-propose([NEW_STORE_VALUE], FUNC, PROPOSAL_DESCRIPTION)
+propose([HASH_VAL, PARENTS], FUNC, PROPOSAL_DESCRIPTION)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error)
