@@ -10,8 +10,10 @@ export const VOTING_DELAY = 1 // 1 Block - How many blocks till a proposal vote 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
 
 export const NEW_STORE_VALUE = 77
-export const FUNC = "store"
-export const PROPOSAL_DESCRIPTION = "Proposal #1 77 stored in the DMC!"
+export const HASH_VAL = "def"
+export const FUNC = "store_law"
+export const PARENTS = ["ghi", "jkl"]
+export const PROPOSAL_DESCRIPTION = "Proposal #[Num] -- [Clauses of the Law]"
 
 
 export interface networkConfigItem {
