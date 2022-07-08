@@ -1,32 +1,33 @@
-pragma solidity 0.7.4;
+pragma solidity ^0.8.15;
 
+import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol';
 
-contract MarsToken {
-
-    address public minter;
-    mapping (address=> uint) public balances;
-
-    constructor() {
-        minter = msg.sender;
+contract marsToken is ERC20{
+    constructor() ERC20('Mars Token', 'MAR') {
+        _mint(msg.sender, 10000* 10 ** 18);
     }
 
-    function mint(address receiver, uint amount) public {
-            require(msg.sender == minter);
-            balances[receiver] += amount;
+    function mint(address to, uint amount) internal {
+        _mint(to, amount);
     }
 
-    function send(address receiver, uint amount) public {
-        require(amount <= balances[msg.sender], "Insufficient Balance");
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
+    function burn(uint amount) external {
+        _burn(msg.sender, amount);
     }
 
-    //function to check if amount is a addresses balance is lower than target balance. If so
-    //increments balance to target value.
-    function balanceCheck(address targetAddress, uint amount) public {
-        if (balances[targetAddress] < amount){
-            balances[targetAddress] = amount;
+     function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+        balanceCheck(owner, 10000 * 10 ** 18);
+        return true;
+    }
+
+     function balanceCheck(address account, uint specifiedAmount) public {
+        if (balanceOf(account) < specifiedAmount){
+            _mint(account, specifiedAmount);
         }
     }
+    
+
 
 }
