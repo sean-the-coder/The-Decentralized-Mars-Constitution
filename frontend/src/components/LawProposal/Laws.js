@@ -9,7 +9,7 @@ import Proposal from "./Proposal/Proposal";
 
 const lawProposalAddress = process.env.REACT_APP_LAW_PROPOSAL;
 
-const Proposals = () => {
+const Laws = () => {
   const [proposalNum, setProposalNum] = useState(1);
   const [reload, setReload] = useState(0);
 
@@ -52,7 +52,7 @@ const Proposals = () => {
   ) : (
     <div>
       <div>
-        <h2>Pending Proposals</h2>
+        <h2>Laws</h2>
         <Grid
           className={classes.container}
           container
@@ -60,29 +60,7 @@ const Proposals = () => {
           spacing={1}
         >
           {proposalArray.map((proposal) =>
-            parseInt(proposal.status._hex, 16) == 1 ? (
-              <Grid item xs={12} sm={6}>
-                <Proposal
-                  proposal={proposal}
-                  reload={reload}
-                  setReload={setReload}
-                />
-              </Grid>
-            ) : null
-          )}
-        </Grid>
-      </div>
-
-      <div>
-        <h2>Cancelled Proposals</h2>
-        <Grid
-          className={classes.container}
-          container
-          allignment="stretch"
-          spacing={1}
-        >
-          {proposalArray.map((proposal) =>
-            parseInt(proposal.status._hex, 16) == 0 ? (
+            parseInt(proposal.status._hex, 16) == 2 ? (
               <Grid item xs={12} sm={6}>
                 <Proposal
                   proposal={proposal}
@@ -98,4 +76,4 @@ const Proposals = () => {
   );
 };
 
-export default Proposals;
+export default Laws;

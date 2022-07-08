@@ -28,10 +28,7 @@ const Home = () => {
               <p class="card-text">
                 The Discord Server is used for communication among citizens
               </p>
-              <a
-                href="https://github.com/sean-the-coder/The-Decentralized-Mars-Constitution"
-                class="btn btn-primary"
-              >
+              <a href="https://discord.gg/jPnaaNuD" class="btn btn-primary">
                 Click to join
               </a>
             </div>

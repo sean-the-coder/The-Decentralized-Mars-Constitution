@@ -21,6 +21,7 @@ contract LawProposal{
     mapping(uint => Proposal) proposals;
     Proposal[] proposalArray;
     mapping(uint => Proposal) laws;
+    Proposal[] lawArray;
     uint proposalCount = 0;
     uint lawCount = 0;
 
@@ -35,31 +36,35 @@ contract LawProposal{
       proposalCount = proposalCount + 1;
       proposals[proposalCount] = proposal;
       proposalArray.push(proposal);
+      //marsCoin.burn(100);
   } 
 
   function voteLaw(uint _proposalNum, bool yesOrNo) public{
       require(userRegistry.checkPermissions(msg.sender) == true, "You are not a citizen");
+      require(_proposalNum > 0, "negative index");
+      marsCoin.transfer(msg.sender, 50);
       //How to check if someone has already voted on a law
       if(yesOrNo){
-          proposals[_proposalNum].voteYes = proposals[_proposalNum].voteYes + 1; 
+          proposalArray[_proposalNum-1].voteYes = proposalArray[_proposalNum-1].voteYes + 1; 
       }
       else{
-          proposals[_proposalNum].voteNo = proposals[_proposalNum].voteNo + 1; 
+          proposalArray[_proposalNum-1].voteNo = proposalArray[_proposalNum-1].voteNo + 1; 
       }
   }
 
     //Currently there is backing step for the law
 
     //Currently the address that created the law can end the vote at anytime. This should be determined by some type of timer
-    function endVote(uint _proposalNum) public{
-        require(proposals[_proposalNum].creator == msg.sender, "You did not create this law");
-        if(proposals[_proposalNum].voteYes > proposals[_proposalNum].voteNo){
-            proposals[_proposalNum].status = 2;
+    function endVote(uint _num) public{
+        uint _proposalNum = _num - 1;
+        require(proposalArray[_proposalNum].creator == msg.sender, "You did not create this law");
+        if(proposalArray[_proposalNum].voteYes > proposalArray[_proposalNum].voteNo){
+            proposalArray[_proposalNum].status = 2;
             lawCount = lawCount + 1;
-            laws[lawCount] = proposals[_proposalNum];
+            lawArray.push(proposalArray[_proposalNum]);
         }
         else{
-            proposals[_proposalNum].status = 0;
+            proposalArray[_proposalNum].status = 0;
         }
     }
 
@@ -88,5 +93,9 @@ contract LawProposal{
 
     function getProposals() public view returns (Proposal [] memory){
         return proposalArray;
+    }
+
+       function getLaws() public view returns (Proposal [] memory){
+        return lawArray;
     }
 }

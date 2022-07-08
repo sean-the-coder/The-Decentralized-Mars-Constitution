@@ -11,6 +11,7 @@ const CreateProposal = () => {
   const [law, setLaw] = useState("");
   const [hash, setHash] = useState("");
   const [count, setCount] = useState(null);
+  const [result, setResult] = useState("");
 
   async function saveFile() {
     const fileData = law;
@@ -29,7 +30,6 @@ const CreateProposal = () => {
 
   // call the smart contract, send an update
   async function proposeLaw() {
-    console.log("here");
     if (typeof window.ethereum !== "undefined") {
       await requestAccount();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -43,7 +43,7 @@ const CreateProposal = () => {
       try {
         const transaction = await contract.proposeLaw(hash);
         await transaction.wait();
-        console.log(`${hash} was stored`);
+        setResult(`Proposal success. Hash is ${hash}`);
       } catch (err) {
         console.log("Error: ", err);
       }
@@ -132,10 +132,12 @@ const CreateProposal = () => {
           >
             Propose The Law
           </button>
+          <br />
+          {result}
         </div>
       </div>
 
-      <br />
+      {/* <br />
       <button
         type="button"
         className="btn btn-outline-secondary"
@@ -151,7 +153,7 @@ const CreateProposal = () => {
       >
         Get Hash
       </button>
-      {`https://ipfs.infura.io/ipfs/${hash}`}
+      {`https://ipfs.infura.io/ipfs/${hash}`} */}
     </div>
   );
 };
