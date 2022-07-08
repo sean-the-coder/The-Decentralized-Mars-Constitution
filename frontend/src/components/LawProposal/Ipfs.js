@@ -4,6 +4,7 @@ import "../../css/bootstrap.css";
 import { useState } from "react";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
+import { Container } from "react-bootstrap";
 
 const client = create("https://ipfs.infura.io:5001/api/v0");
 
@@ -69,26 +70,30 @@ const Ipfs = ({ hash, setHash }) => {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">Upload your file and Click Submit</header>
+    <div class="card">
+      <div class="card-body">
+        <header className="App-header">
+          Upload your file and Click Submit
+        </header>
 
-      <div className="main">
-        <form onSubmit={handleSubmit}>
-          <input type="file" onChange={retrieveFile} />
-          <button type="submit" className="button">
-            Submit
-          </button>
-        </form>
-        <div>
-          {result && validFile ? (
-            <a href={result} style={{ color: "#000" }}>
-              Access file using hash
-            </a>
-          ) : null}
+        <div className="main">
+          <form onSubmit={handleSubmit}>
+            <input type="file" onChange={retrieveFile} />
+            <button type="submit" className="button">
+              Submit
+            </button>
+          </form>
+          <div>
+            {result && validFile ? (
+              <a href={result} style={{ color: "#000" }}>
+                Access file using hash
+              </a>
+            ) : null}
+          </div>
+
+          <br />
+          {result}
         </div>
-
-        <br />
-        {result}
       </div>
     </div>
   );

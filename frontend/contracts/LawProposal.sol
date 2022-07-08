@@ -3,10 +3,11 @@
 pragma solidity ^0.8.0;
 
 import {UserRegistry} from "./UserRegistry.sol";
+import {MarsCoin} from "./MarsCoin.sol";
 
 contract LawProposal{
     UserRegistry public userRegistry;
-
+    MarsCoin public marsCoin;
 
     struct Proposal {
         address creator; //ideally this should be a citizen
@@ -18,12 +19,14 @@ contract LawProposal{
     }
 
     mapping(uint => Proposal) proposals;
+    Proposal[] proposalArray;
     mapping(uint => Proposal) laws;
     uint proposalCount = 0;
     uint lawCount = 0;
 
-  constructor(address _userRegistryAddr) {
+  constructor(address _userRegistryAddr, address _marsCoinAddress) {
     userRegistry = UserRegistry(_userRegistryAddr);
+    marsCoin = MarsCoin(_marsCoinAddress);
   }
 
   function proposeLaw(string memory _hash) public{
@@ -31,6 +34,7 @@ contract LawProposal{
       Proposal memory proposal = Proposal(msg.sender, proposalCount + 1, _hash, 0, 0, 1);
       proposalCount = proposalCount + 1;
       proposals[proposalCount] = proposal;
+      proposalArray.push(proposal);
   } 
 
   function voteLaw(uint _proposalNum, bool yesOrNo) public{
@@ -77,4 +81,12 @@ contract LawProposal{
         return laws[_lawNum].hash;
     }
 
+    function getProposal(uint _proposalNum) public view returns (Proposal memory){
+        require(_proposalNum <= proposalCount && _proposalNum > 0, "Proposal does not exist");
+        return proposals[_proposalNum];
+    }
+
+    function getProposals() public view returns (Proposal [] memory){
+        return proposalArray;
+    }
 }

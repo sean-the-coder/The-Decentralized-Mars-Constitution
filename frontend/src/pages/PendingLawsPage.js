@@ -1,7 +1,12 @@
 import React from "react";
+import Proposals from "../components/LawProposal/Proposals";
 
 const PendingLawsPage = () => {
-  return <div>PendingLawsPage</div>;
+  return (
+    <div>
+      <Proposals />
+    </div>
+  );
 };
 
 export default PendingLawsPage;

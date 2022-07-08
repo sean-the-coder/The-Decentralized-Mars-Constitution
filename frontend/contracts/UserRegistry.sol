@@ -2,7 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-contract UserRegistry {
+// Created by Charlie
+
+import {MarsCoin} from "./MarsCoin.sol";
+
+contract UserRegistry{
+    
+    MarsCoin public marsCoin;
 
     struct Citizen {
         uint id;
@@ -11,9 +17,10 @@ contract UserRegistry {
         address citizenAddress;
     }
 
-    constructor() {
+    constructor(address _marsCoinAddress) {
         ownerAddress = msg.sender;
         permissions[ownerAddress] = true;
+        marsCoin = MarsCoin(_marsCoinAddress);
     }
 
     address ownerAddress;
@@ -26,8 +33,9 @@ contract UserRegistry {
         return citizens[_id];
     }
 
-    function _registerUser(string memory _name, string memory _dateOfBirth, address _address) public {
+    function registerUser(string memory _name, string memory _dateOfBirth, address _address) public {
         require(msg.sender == ownerAddress, "Only owner can register new users");
+        marsCoin.transfer(_address, 10000);
         Citizen memory newUser = Citizen(count, _name, _dateOfBirth, _address);
         citizens[count] = newUser;
         permissions[_address] = true;
@@ -45,7 +53,11 @@ contract UserRegistry {
     }
 
     function checkPermissions(address _address) public view returns(bool){
-        //TODO: Implement some type of null check. Otherwise, catch error on the frontend
+       // require(permissions[_address].registered == true, "This address is not registered");
         return permissions[_address];
+    }
+
+    function checkUser(address _address) public view returns(bool){
+        return _address == ownerAddress;
     }
 }

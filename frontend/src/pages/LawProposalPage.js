@@ -1,10 +1,10 @@
 import React from "react";
-import Proposal from "../components/LawProposal/Proposal";
+import CreateProposal from "../components/LawProposal/CreateProposal";
 
 const LawProposalPage = () => {
   return (
     <div>
-      <Proposal />
+      <CreateProposal />
     </div>
   );
 };

@@ -3,25 +3,29 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
+const { getRoles } = require("@testing-library/react");
 const hre = require("hardhat");
 
 async function main() {
-  // We get the contract to deploy
-  const TestingIPFS = await hre.ethers.getContractFactory("IpfsTest");
-  const testingIPFS = await TestingIPFS.deploy();
+  // We first deploy the coin
+  const MarsCoin = await hre.ethers.getContractFactory("MarsCoin");
+  const marsCoin = await MarsCoin.deploy();
 
-  await testingIPFS.deployed();
-
-  console.log("TestingIPFS deployed to:", testingIPFS.address);
+  await marsCoin.deployed();
 
   const UserRegistry = await hre.ethers.getContractFactory("UserRegistry");
-  const userRegistry = await UserRegistry.deploy();
+  const userRegistry = await UserRegistry.deploy(marsCoin.address);
+
+  await userRegistry.deployed();
 
   const LawProposal = await hre.ethers.getContractFactory("LawProposal");
-  const lawProposal = await LawProposal.deploy(userRegistry.address)
+  const lawProposal = await LawProposal.deploy(
+    userRegistry.address,
+    marsCoin.address
+  );
 
-    console.log("UserRegistry deployed to", userRegistry.address);
-    console.log("LawProposal deployed to:", lawProposal.address);
+  console.log("UserRegistry deployed to", userRegistry.address);
+  console.log("LawProposal deployed to:", lawProposal.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

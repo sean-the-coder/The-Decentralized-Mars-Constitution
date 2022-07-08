@@ -4,6 +4,7 @@ import LawProposalPage from "./pages/LawProposalPage";
 import PendingLawsPage from "./pages/PendingLawsPage";
 import ConstitutionPage from "./pages/ConstitutionPage";
 import AboutPage from "./pages/AboutPage";
+import RegisterPage from "./pages/RegisterPage";
 import "./css/bootstrap.css";
 import { Navbar, Nav } from "react-bootstrap";
 import "./css/bootstrap.css";
@@ -36,6 +37,11 @@ const App = () => {
                   </Link>
                 </div>
                 <div class="col-sm">
+                  <Link to="/reg">
+                    <h3> Register</h3>
+                  </Link>
+                </div>
+                <div class="col-sm">
                   <Link to="/pal">
                     <h3> Propose a Law</h3>
                   </Link>
@@ -58,6 +64,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/a" element={<AboutPage />} />
+          <Route path="/reg" element={<RegisterPage />} />
           <Route path="/pal" element={<LawProposalPage />} />
           <Route path="/pl" element={<PendingLawsPage />} />
           <Route path="/c" element={<ConstitutionPage />} />
