@@ -2,7 +2,7 @@
 
 This project uses Hardhat, ethers.js, and React
 
-To start clone this repository into your own directory.
+To start clone this repository into your own directory. CD into the frontend
 
 1) Install the dependencies with 
 ```shell
