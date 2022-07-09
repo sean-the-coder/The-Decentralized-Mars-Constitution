@@ -19,15 +19,15 @@ contract MarsCoin is ERC20{
         _burn(msg.sender, amount);
     }
 
-     function transfer(address to, uint256 amount) public override returns (bool) {
-        _transfer(owner, to, amount);
-        balanceCheck(owner, 10000 * 10 ** 18);
+     function transfer(address from, address to, uint256 amount) public  returns (bool) {
+        _transfer(from, to, amount);
+       // balanceCheck(owner, 10000 * 10 ** 18);
         return true;
     }
 
-     function balanceCheck(address account, uint specifiedAmount) public {
-        if (balanceOf(account) < specifiedAmount){
-            _mint(account, specifiedAmount);
-        }
-    }
+    //  function balanceCheck(address account, uint specifiedAmount) public {
+    //     if (balanceOf(account) < specifiedAmount){
+    //         _mint(account, specifiedAmount);
+    //     }
+    // }
 }

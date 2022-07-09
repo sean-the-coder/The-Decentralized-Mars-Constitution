@@ -23,7 +23,7 @@ contract UserRegistry{
         marsCoin = MarsCoin(_marsCoinAddress);
     }
 
-    address ownerAddress;
+    address public ownerAddress;
     uint count = 1;
 
     mapping(address => bool) permissions;
@@ -35,7 +35,7 @@ contract UserRegistry{
 
     function registerUser(string memory _name, string memory _dateOfBirth, address _address) public {
         require(msg.sender == ownerAddress, "Only owner can register new users");
-        marsCoin.transfer(_address, 10000);
+        marsCoin.transfer(msg.sender, _address, 10000);
         Citizen memory newUser = Citizen(count, _name, _dateOfBirth, _address);
         citizens[count] = newUser;
         permissions[_address] = true;
@@ -60,4 +60,9 @@ contract UserRegistry{
     function checkUser(address _address) public view returns(bool){
         return _address == ownerAddress;
     }
+
+    function getOwner() public view returns (address){
+        return ownerAddress;
+    }
+
 }

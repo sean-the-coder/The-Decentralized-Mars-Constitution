@@ -41,6 +41,7 @@ const CreateProposal = () => {
       );
 
       try {
+        checkBalance();
         const transaction = await contract.proposeLaw(hash);
         await transaction.wait();
         setResult(`Proposal success. Hash is ${hash}`);
@@ -72,14 +73,34 @@ const CreateProposal = () => {
     if (typeof window.ethereum !== "undefined") {
       await requestAccount();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(
         lawProposalAddress,
         LawProposal.abi,
-        provider
+        signer
       );
       try {
         const data = await contract.getProposalHash(4);
         setHash(data);
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    }
+  }
+
+  async function checkBalance() {
+    if (typeof window.ethereum !== "undefined") {
+      await requestAccount();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        lawProposalAddress,
+        LawProposal.abi,
+        signer
+      );
+      try {
+        const data = await contract.checkBalance();
+        console.log(data);
       } catch (err) {
         console.log("Error: ", err);
       }

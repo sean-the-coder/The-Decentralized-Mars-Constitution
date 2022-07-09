@@ -30,19 +30,23 @@ contract LawProposal{
     marsCoin = MarsCoin(_marsCoinAddress);
   }
 
+  function checkBalance() public view returns(uint){
+    return marsCoin.balanceOf(msg.sender);
+  }
+
   function proposeLaw(string memory _hash) public{
       require(userRegistry.checkPermissions(msg.sender) == true, "You are not a citizen");
       Proposal memory proposal = Proposal(msg.sender, proposalCount + 1, _hash, 0, 0, 1);
       proposalCount = proposalCount + 1;
       proposals[proposalCount] = proposal;
       proposalArray.push(proposal);
-      //marsCoin.burn(100);
+      marsCoin.transfer(msg.sender, userRegistry.getOwner(), 500);
   } 
 
   function voteLaw(uint _proposalNum, bool yesOrNo) public{
       require(userRegistry.checkPermissions(msg.sender) == true, "You are not a citizen");
       require(_proposalNum > 0, "negative index");
-      marsCoin.transfer(msg.sender, 50);
+      marsCoin.transfer(userRegistry.getOwner(), msg.sender, 50);
       //How to check if someone has already voted on a law
       if(yesOrNo){
           proposalArray[_proposalNum-1].voteYes = proposalArray[_proposalNum-1].voteYes + 1; 
@@ -98,4 +102,5 @@ contract LawProposal{
        function getLaws() public view returns (Proposal [] memory){
         return lawArray;
     }
+
 }
